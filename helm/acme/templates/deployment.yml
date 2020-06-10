@@ -19,4 +19,4 @@ spec:
           - name: VTT_DBHOST
             value: {{ .Values.dbhost }}
         ports:
-        - containerPort: 80
+        - containerPort: 3000
