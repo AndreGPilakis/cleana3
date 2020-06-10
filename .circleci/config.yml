@@ -182,6 +182,10 @@ jobs:
           name: deploy app
           command: | 
             helm upgrade acme artifacts/acme.tgz -i -n test --set image=$(cat artifacts/image.txt),dbhost=$(cat artifacts/dbendpoint.txt)
+      - run:
+          name: upgrade database
+          command: |
+            kubectl exec deployment/app -n test -- npm install node_modules/.bin/sequelize
 
 workflows:
   version: 2
