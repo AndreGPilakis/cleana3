@@ -185,7 +185,7 @@ jobs:
       - run:
           name: upgrade database
           command: |
-            kubectl exec deployment/app -n test -- npm install node_modules/.bin/sequelize
+            kubectl exec deployment/acme -n prod -- env NODE_ENV=production node_modules/.bin/sequelize db:migrate
 
 workflows:
   version: 2
