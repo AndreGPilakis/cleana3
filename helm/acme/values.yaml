@@ -1,0 +1,5 @@
+# Default values for techtestapp.
+
+replicaCount: 5
+image: 724066712853.dkr.ecr.us-east-1.amazonaws.com/app:87cb31afb9b0f01dce8be15a82e62684339ee19a
+dbhost: localhost
