@@ -16,7 +16,7 @@ spec:
       - image: {{ .Values.image }}
         name: "acme"
         env:
-          - name: VTT_DBHOST
+          - name: DB_HOST
             value: {{ .Values.dbhost }}
         ports:
         - containerPort: 3000
