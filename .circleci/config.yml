@@ -181,10 +181,11 @@ jobs:
       - run:
           name: deploy app
           command: | 
-            helm upgrade acme artifacts/acme.tgz -i -n test --wait --set image=$(cat artifacts/image.txt),dbhost=$(cat artifacts/dbendpoint.txt)
+            helm upgrade acme artifacts/acme.tgz -i -n test --set image=$(cat artifacts/image.txt),dbhost=$(cat artifacts/dbendpoint.txt)
       - run:
           name: upgrade database
           command: |
+            sleep 10s
             kubectl exec deployment/acme -n test -- env NODE_ENV=production node_modules/.bin/sequelize db:migrate
 
 workflows:
