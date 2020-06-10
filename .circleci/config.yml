@@ -181,7 +181,7 @@ jobs:
       - run:
           name: deploy app
           command: | 
-            helm upgrade acme artifacts/acme.tgz -i -n test --set image=$(cat artifacts/image.txt)
+            helm upgrade acme artifacts/acme.tgz -i -n test --set image=$(cat artifacts/image.txt),dbhost=(cat artifacts/dbendpoint.txt)
 
 workflows:
   version: 2
