@@ -149,7 +149,7 @@ jobs:
           command: | 
             cd helm 
             helm package acme --app-version ${CIRCLE_SHA1}
-            mv acme-0.1.0.tgz ../artifacts/techtestapp.tgz 
+            mv acme-0.1.0.tgz ../artifacts/acme.tgz 
           #helm package helm/acme --app-version ${CIRCLE_SHA1} -d artifacts
       - run:
           name: Package infra
@@ -184,9 +184,6 @@ workflows:
   build-test-package:
     jobs:
       - build
-      - deploy-test:
-          requires:
-            - build
       # - integration:
       #     requires: 
       #       - build
@@ -196,7 +193,9 @@ workflows:
       - package:
           requires:
             - build
-            # - integration
+      - deploy-test:
+          requires:
+              - package
           filters:
             branches:
               only: master
