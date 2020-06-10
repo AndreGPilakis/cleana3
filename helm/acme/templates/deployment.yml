@@ -16,7 +16,13 @@ spec:
       - image: {{ .Values.image }}
         name: "acme"
         env:
-          - name: DB_HOST
+          - name: DB_HOSTNAME
             value: {{ .Values.dbhost }}
+          - name: DB_USERNAME
+            value: {{ .Values.dbuser }}
+          - name: DB_PASSWORD
+            value: {{ .Values.dbpassword }}
+          - name: DB_NAME
+            value: {{ .Values.dbname }}
         ports:
         - containerPort: 3000
