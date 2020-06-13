@@ -11,9 +11,15 @@ The HELM chart was created by executing the command
 
 `helm create acme`
 After this, un needed files were removed from the directory.
-```$> cd game2048
+```
+$> cd game2048
 $> rmdir charts
-$> rm -rf templates/*```
+$> rm -rf templates/*
+```
+
+After this, I created a Deployment manifest for the application as shown below:
+![Deployment](https://imgur.com/a/6YpKaYr)
+
 
 
 To stand up the kubernetes cluster go into the `environment` directory and follow the directions in the make file
