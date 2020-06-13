@@ -240,7 +240,9 @@ workflows:
             - build
       - deploy-test:
           requires:
-              - package
+              - build
+      - approval:
+          type: approval    
       - deploy-prod:
           requires:
               - deploy-test 

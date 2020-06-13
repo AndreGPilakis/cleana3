@@ -98,6 +98,57 @@ This is done after applying the helm chart, with the code snippet as below. It s
 After all of this, the application can be found be pasting the load balancer address into a web browser, as shown bellow:
 ![deployed](https://i.imgur.com/ATxzEEW.png)
 
-To stand up the kubernetes cluster go into the `environment` directory and follow the directions in the make file
+## E Deploy the application into a production environment
+This was rather simple. To do this, I simply copied the deploy-test job and changed the Environment to prod, as well as changing the namespaces we wish to work on to prod instead of test.
+```
+  deploy-prod:
+    docker:
+      - image: cimg/base:2020.01
+    environment:
+      ENV: prod
+    steps:
+      - attach_workspace:
+          at: ./
+        
+      - setup-cd
+
+      - run:
+          name: deploy infra
+          command: |
+            cd artifacts/infra
+            make init
+            make up
+            terraform output endpoint > ../dbendpoint.txt
+        
+      - run:
+          name: deploy app
+          command: | 
+            helm upgrade acme artifacts/acme.tgz -i -n prod --wait --set image=$(cat artifacts/image.txt),dbhost=$(cat artifacts/dbendpoint.txt)
+      - run:
+          name: upgrade database
+          command: |
+            sleep 10s
+            kubectl exec deployment/acme -n prod -- env NODE_ENV=production node_modules/.bin/sequelize db:migrate
+```
+
+After this, the deploy prod job is added to the pipeline after deploy-test. A stage gate is also added, so that we must manually approve before deploying to our live test environment.
+
+```
+      - deploy-test:
+          requires:
+              - build
+      - approval:
+          type: approval    
+      - deploy-prod:
+          requires:
+              - deploy-test 
+```
+
+The successful Pipielines and jobs can be seen here:
+![Pipeline](https://i.imgur.com/p8mHLhu.png)
+
+![Job](https://i.imgur.com/TKXqRg9.png)
+
+
 
 
