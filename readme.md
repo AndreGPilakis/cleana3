@@ -20,9 +20,8 @@ $> rm -rf templates/*
 ```
 
 After this, I created a Deployment manifest for the application as shown below:
-!(Deployment)[imgur.com/a/6YpKaYr]
+![Deployment](https://i.imgur.com/TIAvbrw.png)
 
-Inside this Deployment file we specify many aspects of the deployment. Notably, we are accessing our values file to access the variables for the replicaCount, The image name that is stored in the values file, aswell as all of the database credentials.
-
+Inside this Deployment file I specify many aspects of the deployment. Notably, we are accessing our values file to access the variables for the replicaCount, The image name that is stored in the values file, aswell as all of the database credentials.
 
 To stand up the kubernetes cluster go into the `environment` directory and follow the directions in the make file
