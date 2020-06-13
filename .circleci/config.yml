@@ -178,12 +178,12 @@ jobs:
             make init
             make up
             terraform output endpoint > ../dbendpoint.txt
-      
+        
       - run:
           name: create namespaces
           command: |
-            kubectl create namespace test
-            kubectl create namespace prod
+             kubectl get namespace test || kubectl create namespace test
+             kubectl get namespace prod || kubectl create namespace prod
 
       - run:
           name: deploy app
@@ -194,6 +194,35 @@ jobs:
           command: |
             sleep 10s
             kubectl exec deployment/acme -n test -- env NODE_ENV=production node_modules/.bin/sequelize db:migrate
+
+  deploy-prod:
+    docker:
+      - image: cimg/base:2020.01
+    environment:
+      ENV: prod
+    steps:
+      - attach_workspace:
+          at: ./
+        
+      - setup-cd
+
+      - run:
+          name: deploy infra
+          command: |
+            cd artifacts/infra
+            make init
+            make up
+            terraform output endpoint > ../dbendpoint.txt
+        
+      - run:
+          name: deploy app
+          command: | 
+            helm upgrade acme artifacts/acme.tgz -i -n prod --wait --set image=$(cat artifacts/image.txt),dbhost=$(cat artifacts/dbendpoint.txt)
+      - run:
+          name: upgrade database
+          command: |
+            sleep 10s
+            kubectl exec deployment/acme -n prod -- env NODE_ENV=production node_modules/.bin/sequelize db:migrate
 
 workflows:
   version: 2
@@ -212,6 +241,9 @@ workflows:
       - deploy-test:
           requires:
               - package
+      # - deploy-prod:
+      #     requires:
+      #         - deploy-test 
           filters:
             branches:
               only: master
