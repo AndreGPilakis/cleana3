@@ -241,9 +241,9 @@ workflows:
       - deploy-test:
           requires:
               - package
-      # - deploy-prod:
-      #     requires:
-      #         - deploy-test 
+      - deploy-prod:
+          requires:
+              - deploy-test 
           filters:
             branches:
               only: master
