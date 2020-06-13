@@ -179,6 +179,12 @@ jobs:
             make up
             terraform output endpoint > ../dbendpoint.txt
       - run:
+          name: create namespaces
+          command: |
+            kubectl exec create namespace test
+            kubectl exec create namespace prod
+
+      - run:
           name: deploy app
           command: | 
             helm upgrade acme artifacts/acme.tgz -i -n test --wait --set image=$(cat artifacts/image.txt),dbhost=$(cat artifacts/dbendpoint.txt)
