@@ -59,10 +59,10 @@ This was done by creating a job to create the applications namespaces as follows
       - run:
           name: create namespaces
           command: |
-            kubectl create namespace test
-            kubectl create namespace prod
+             kubectl get namespace test || kubectl create namespace test
+             kubectl get namespace prod || kubectl create namespace prod
 ```
-Both the test and prod namespaces were made here.
+Both the test and prod namespaces are made here. The left half of the command checks if it exists, if not it will create the namespace.
 
 ### Deploy a database to back the application
 This is done during the deploy infra step. Where running the make init and make up scripts, we create and RDS cluster and export the endpoint to our artifacts text file.
